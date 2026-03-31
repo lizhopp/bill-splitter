@@ -1,4 +1,4 @@
-import { getGreeting } from "./db/queries/greetings.js";
+import { getGreeting, seed } from "./db/queries/greetings.js";
 import express from "express";
 import db from "./db/client.js";
 import cors from "cors";
@@ -12,26 +12,22 @@ app.use(cors());
 
 app.get("/greet", helloWorld);
 
-app.get("/seed", seed);
+app.get("/seed", seedDatabase);
 
-async function seed(req, res) {
-  await db.query(`CREATE TABLE IF NOT EXISTS greetings(
-        id SERIAL PRIMARY KEY,
-        message TEXT NOT NULL);
-        `);
-
-  await db.query(`INSERT INTO greetings (message)
-    VALUES('Hello World');`);
-
-  res.send("database seeded");
+async function seedDatabase(req, res) {
+  try {
+    await seed();
+    res.send("database seeded");
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
 }
 async function helloWorld(req, res) {
   try {
-    console.log("calling db getGreeting");
     const greeting = await getGreeting();
     res.status(200).json(greeting);
   } catch (error) {
-    console.log("error");
+    res.status(500).json(error.message);
   }
 }
 

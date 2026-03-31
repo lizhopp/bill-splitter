@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "db:schema": "psql -d greetings_evxu -f db/schema.sql",
+    "db:schema": "psql -d greetings -f db/schema.sql",
     "db:seed": "node db/seed.js"
   },
   "author": "",
