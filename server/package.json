@@ -6,13 +6,12 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
-    "db:schema": "psql -d greetings -f db/schema.sql",
-    "db:seed": "node db/seed.js"
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "pg": "^8.20.0"
