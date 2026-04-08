@@ -20,7 +20,7 @@ function App() {
         setMessage("Error: Could not Load");
       }
     }
-  });
+  }, [API_BASE]);
   return <>
   <h2>Hi {user.name}! Or should I say...</h2>
   <h1>{message}</h1></>;
