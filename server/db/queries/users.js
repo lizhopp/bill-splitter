@@ -52,7 +52,7 @@ export async function seedUsers() {
         id SERIAL PRIMARY KEY,
         firstName TEXT NOT NULL,
         lastName TEXT NOT NULL,
-        email TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL);
         `);
   await createUser({
