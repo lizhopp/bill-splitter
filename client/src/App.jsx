@@ -1,21 +1,38 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-import { Link, Navigate, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import { useAuth } from "./auth/AuthContext";
 
 function App() {
+  const { token, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <>
       <nav>
-        <Link to="/home">Home</Link> | <Link to="/register">Register</Link> |{" "}
-        <Link to="/login">Login</Link> | <Link to="/account">Account</Link>
+        <Link to="/">Home</Link> |{" "}
+        {token ? (
+          <>
+           <Link to="/account">Account</Link>{" "}
+            |   <Link to="/" onClick={handleLogout}>
+              Logout
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link to="/register">Register</Link> |{" "}
+            <Link to="/login">Login</Link>
+          </>
+        )}
       </nav>
 
       <Routes>
-        <Route path="/" element={<Navigate to="/home" replace />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/account" element={<Account />} />
