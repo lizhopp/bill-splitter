@@ -1,53 +1,23 @@
-import { getGreetings, seedGreetings } from "./db/queries/greetings.js";
-import { seedUsers, getUserById } from "./db/queries/users.js";
 import express from "express";
 import db from "./db/client.js";
 import cors from "cors";
+import usersRouter from "./routes/users.js";
+import greetRouter from "./routes/greet.js";
+import getUserFromToken from "#middleware/getUserFromToken";
 
 const app = express();
 
 const PORT = process.env.PORT || 3001;
 
+//settings
 app.use(express.json());
 app.use(cors());
 
-app.get("/greet", helloWorld);
+//middleware
+app.use(getUserFromToken);
 
-app.get("/seed", seedDatabase);
-
-app.get("/users/:id", getUser);
-/**
- * API Endpoint to Reset the Database to only seeded data
- * @param {*} req 
- * @param {*} res 
- */
-async function getUser(req, res) {
-  try {
-    const user = await getUserById(req.params.id);
-    if (!user) return res.status(404).json({ error: "User not found" });
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json(error.message);
-  }
-}
-
-async function seedDatabase(req, res) {
-  try {
-    await seedGreetings();
-    await seedUsers();
-    res.send("database seeded");
-  } catch (error) {
-    res.status(500).json(error.message);
-  }
-}
-async function helloWorld(req, res) {
-  try {
-    const greetings = await getGreetings();
-    res.status(200).json(greetings[0]);
-  } catch (error) {
-    res.status(500).json(error.message);
-  }
-}
+app.use("/users", usersRouter);
+app.use("/greet", greetRouter);
 
 await db.connect();
 
